@@ -1,6 +1,7 @@
 package tictactoe;
 import java.util.Scanner;
 import java.util.stream.StreamSupport;
+import java.util.Random;
 
 public class Main {
     //private static int greedPrints = 0;
@@ -26,12 +27,45 @@ public class Main {
         }
     }
 
+    public static int[] CPUMove(char[][] matrix) {
+        int[] coordinates = new int[2];
+        Random random = new Random();
+        boolean searching = true;
+        System.out.println("Making move level \"easy\"");
+        while (searching) {
+            for (int i = 0; i < matrix.length; i++) {
+                for (int j = 0; j < matrix[0].length; j++) {
+                    if (matrix[i][j] == '_') {
+                        if (random.nextInt(2) == 0) {
+                            coordinates[0] = i + 1;
+                            coordinates[1] = j + 1;
+                            searching = false;
+                            return coordinates;
+                        }
+                    }
+                }
+            }
+        }
+
+        return coordinates;
+    }
+
     public static void startTheGame(char[][] matrix) {
         int[] coordinates;
         char move = getMove(matrix);
         while (!findTheWinner(matrix)) {
+            switch (move){
+                case 'X':
+                    coordinates = inputCoordinates(matrix);
+                    break;
+                case 'O':
+                    coordinates = CPUMove(matrix);
+                    break;
+                default:
+                    coordinates = inputCoordinates(matrix);
+                    break;
+            }
 
-            coordinates = inputCoordinates(matrix);
             matrix = updateMatrixWithMove(matrix, coordinates, move);
             printGridFromMatrix(matrix);
 
@@ -144,7 +178,7 @@ public class Main {
             System.out.println("Impossible");
             return true;
         } else {
-            System.out.println("Game not finished");
+            //System.out.println("Game not finished");
             return false;
         }
 
