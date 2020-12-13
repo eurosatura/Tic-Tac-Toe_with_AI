@@ -8,11 +8,53 @@ public class Main {
 
     public static void main(String[] args) {
         // write your code here
-        String cells = "_________";
-        //String cells = inputCells();
-        char[][] matrix = fillTheMatrix(cells);
-        printGridFromMatrix(matrix);
-        startTheGame(matrix);
+        String gameMode = "";
+        while (!"exit".equals(gameMode)) {
+            gameMode = openMenu();
+
+            if (!"exit".equals(gameMode)) {
+                String cells = "_________";
+                //--String cells = inputCells();
+                char[][] matrix = fillTheMatrix(cells);
+                printGridFromMatrix(matrix);
+                startTheGame(matrix, gameMode);
+            }
+        }
+    }
+
+    public static String openMenu() {
+
+        String option;
+        Scanner scanner = new Scanner(System.in);
+
+        boolean valid = false;
+        String gameMode = "exit";
+        while (!valid) {
+            System.out.print("Input command: ");
+            option = scanner.nextLine();
+
+            switch (option) {
+                case "start easy easy":
+                    gameMode = "cpu2cpu";
+                    valid = true;
+                    return gameMode;
+                case "start easy user":
+                    gameMode = "cpu2p";
+                    valid = true;
+                    return gameMode;
+                case "start user user":
+                    gameMode = "p2p";
+                    valid = true;
+                    return gameMode;
+                case "exit":
+                    valid = true;
+                    return option;
+                default:
+                    System.out.println("Bad parameters!");
+                    break;
+            }
+        }
+        return gameMode;
     }
 
     public static char getMove(char[][] matrix) {
@@ -50,21 +92,25 @@ public class Main {
         return coordinates;
     }
 
-    public static void startTheGame(char[][] matrix) {
-        int[] coordinates;
+    public static void startTheGame(char[][] matrix, String gameMode) {
+        int[] coordinates = { 0, 0 };
         char move = getMove(matrix);
         while (!findTheWinner(matrix)) {
-            switch (move){
-                case 'X':
-                    coordinates = inputCoordinates(matrix);
-                    break;
-                case 'O':
-                    coordinates = CPUMove(matrix);
-                    break;
-                default:
-                    coordinates = inputCoordinates(matrix);
-                    break;
+            if ("cpu2p".equals(gameMode)) {
+                switch (move){
+                    case 'X':
+                        coordinates = inputCoordinates(matrix);
+                        break;
+                    case 'O':
+                        coordinates = CPUMove(matrix);
+                        break;
+                }
+            } else if ("cpu2cpu".equals(gameMode)) {
+                coordinates = CPUMove(matrix);
+            } else if ("p2p".equals(gameMode)) {
+                coordinates = inputCoordinates(matrix);
             }
+
 
             matrix = updateMatrixWithMove(matrix, coordinates, move);
             printGridFromMatrix(matrix);
