@@ -12,7 +12,6 @@ public class Main {
         char[][] matrix = fillTheMatrix(cells);
         printGridFromMatrix(matrix);
         startTheGame(matrix);
-
     }
 
     public static char getMove(char[][] matrix) {
